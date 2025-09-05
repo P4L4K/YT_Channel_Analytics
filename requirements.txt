@@ -1,3 +1,7 @@
 google-api-python-client
 pandas
-seaborn
+streamlit
+sklearn
+plotly.express
+joblib
+numpy
