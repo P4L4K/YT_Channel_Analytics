@@ -46,11 +46,12 @@ def data_prep(channels_data):
     
     # Merge scaled data with original
     channels_data = pd.concat([channels_data, scaled_df], axis=1)
-      # Advanced Engagement (rebalanced weights)
-    channels_data["advanced_engagement"] = (
-        0.4 * channels_data["viewCount_scaled"] +
-        0.4 * channels_data["subscriberCount_scaled"] -
-        0.1 * channels_data["videoCount_scaled"] +
-        0.3 * channels_data["engagement_scaled"]
+    # Advanced popularity (rebalanced weights)
+    channels_data["advanced_popularity"] = (
+        0.5 * channels_data["subscriberCount_scaled"] +   # subscribers weigh more for popularity
+        0.3 * channels_data["viewCount_scaled"] +         # views still important
+        0.1 * channels_data["engagement_scaled"] +        # engagement ratio adds nuance
+        -0.1 * channels_data["videoCount_scaled"]          # penalize too many videos (quality over quantity)
     )
+
     return channels_data

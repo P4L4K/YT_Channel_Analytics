@@ -1,7 +1,7 @@
 import streamlit as st
-from channel_data import fetch_channel_details
-from data_preprocessing import data_prep
-from comparison import clustering, visualize
+from package.channel_data import fetch_channel_details
+from package.data_preprocessing import data_prep
+from package.comparison import clustering, visualize, assign_rank_with_cluster_boost
 st.write('YT_Channel_Analytics: A Machine Learning Powered YouTube Popularity Analyzer')
 
 # Input box for user channel IDs
@@ -22,9 +22,10 @@ if st.button('Analyse'):
             st.success("Data Fetched")
             data=data_prep(data)
             data=clustering(data)
+            data=assign_rank_with_cluster_boost(data)
             #show clustered data
             st.subheader("Channels with Popularity Levels")
-            st.dataframe(data[['title','viewCount','subscriberCount','videoCount','popularity_level','channelId']])
+            st.dataframe(data[['title','viewCount','subscriberCount','videoCount','popularity_level','channelId','rank']].sort_values(by='rank'))
             if len(data) >1:
                 st.subheader("Cluster Summary")
                 st.dataframe(data.groupby('popularity_level').size().reset_index(name='count'))
